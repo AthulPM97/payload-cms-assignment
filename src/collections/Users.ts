@@ -5,9 +5,6 @@ const Users: CollectionConfig = {
   auth: true,
   admin: {
     useAsTitle: 'email',
-    livePreview: {
-      url: 'http://localhost:3000',
-    }
   },
   fields: [
     // Email added by default
