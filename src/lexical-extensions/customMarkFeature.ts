@@ -5,9 +5,9 @@ import type { FeatureProvider, Feature } from "@payloadcms/richtext-lexical";
 import { SectionWithEntries } from "./floatingSelectToolbarSection";
 import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND } from "lexical";
 
-import MarkIcon from "./customIcon";
+import MarkIcon from "./customMarkIcon";
 
-export const YourCustomFeature = (): FeatureProvider => {
+export const CustomMarkFeature = (): FeatureProvider => {
   return {
     feature: (props): Feature => {
       return {
@@ -17,7 +17,6 @@ export const YourCustomFeature = (): FeatureProvider => {
               {
                 ChildComponent: MarkIcon,
                 isActive: ({ selection }) => {
-                  console.log("selection ", selection);
                   if ($isRangeSelection(selection)) {
                     return selection.hasFormat("highlight");
                   }
