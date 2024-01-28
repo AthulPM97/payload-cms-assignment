@@ -5,16 +5,12 @@ import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { buildConfig } from "payload/config";
 
-import {
-  LinkFeature,
-  SuperscriptTextFeature,
-  lexicalEditor,
-} from "@payloadcms/richtext-lexical";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import Users from "./collections/Users";
 import { Posts } from "./collections/Posts";
 
-import { CustomMarkFeature } from "./lexical-extensions/customMarkFeature";
-import { CustomSuperScript } from "./lexical-extensions/customSuperScript";
+import { CustomMarkFeature } from "./lexical-extensions/Mark/customMarkFeature";
+import { CustomSuperScript } from "./lexical-extensions/Superscript/customSuperScript";
 
 export default buildConfig({
   admin: {

@@ -2,7 +2,7 @@
 //This object should include information about your feature, such as converters, nodes, and any other configurations.
 
 import type { FeatureProvider, Feature } from "@payloadcms/richtext-lexical";
-import { SectionWithEntries } from "./floatingSelectToolbarSection";
+import { SectionWithEntries } from "../floatingSelectToolbarSection";
 import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND } from "lexical";
 
 import MarkIcon from "./customMarkIcon";
