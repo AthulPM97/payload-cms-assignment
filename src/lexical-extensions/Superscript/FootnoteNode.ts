@@ -1,11 +1,11 @@
-import { ElementNode, LexicalNode, createCommand, type NodeKey } from "lexical";
-import type { BaseSelection } from "lexical";
 import {
-  $applyNodeReplacement,
-  $createTextNode,
-  $getSelection,
-  $isRangeSelection,
+  ElementNode,
+  LexicalNode,
+  type NodeKey,
+  isHTMLElement,
 } from "lexical";
+import type { BaseSelection, LexicalEditor } from "lexical";
+import { $applyNodeReplacement } from "lexical";
 import type {
   DOMConversionMap,
   DOMConversionOutput,
@@ -14,6 +14,7 @@ import type {
   SerializedElementNode,
   Spread,
 } from "lexical";
+import { TOGGLE_FOOTNOTE_MODAL_COMMAND } from "../commands";
 
 export type FootnoteFields = {
   description: string;
@@ -56,6 +57,12 @@ export class FootnoteNode extends ElementNode {
   }
 
   static importDOM(): DOMConversionMap | null {
+    // return {
+    //   a: (node: Node) => ({
+    //     conversion: convertFootnoteElement,
+    //     priority: 1,
+    //   }),
+    // }
     return null;
   }
 
@@ -81,9 +88,16 @@ export class FootnoteNode extends ElementNode {
     return false;
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
+  createDOM(config: EditorConfig, editor: LexicalEditor): HTMLElement {
     const element = document.createElement("sup");
     element.textContent = this.__fields.id.toString(); // Display the footnote id as superscript
+    element.style.borderBottom = "1px dotted";
+    element.style.color = "#1E88E5";
+    element.addEventListener("click", () => {
+      editor.dispatchCommand(TOGGLE_FOOTNOTE_MODAL_COMMAND, {
+        description: this.__fields.description,
+      });
+    });
     return element;
   }
 
@@ -101,8 +115,6 @@ export class FootnoteNode extends ElementNode {
 
   insertNewAfter(): ElementNode | null {
     // Insert a new footnote node after the current selection
-    const selection = $getSelection();
-    console.log("insert after ", selection);
     return null;
   }
 
@@ -138,15 +150,40 @@ export function $isFootnoteNode(
 
 export function $getFootnoteCount(nodeTree: any) {
   const nodeArray = Array.from(nodeTree.values());
-  if (!nodeTree || !nodeTree.values || typeof nodeTree.values !== 'function') {
+  if (!nodeTree || !nodeTree.values || typeof nodeTree.values !== "function") {
     return 0;
   }
   let count = 0;
   for (let i = 0; i < nodeArray.length; i++) {
-    const node = nodeArray[i]
+    const node = nodeArray[i];
     if (node && node["__type"] === "footnote") {
       count++;
     }
   }
   return count;
+}
+
+function convertFootnoteElement(domNode: Node): DOMConversionOutput {
+  let node: FootnoteNode | null = null;
+
+  // Check if the provided DOM node is an HTML element
+  if (isHTMLElement(domNode)) {
+    const content = domNode.textContent;
+
+    // Check if the element has non-empty text content
+    if (content !== null && content !== "") {
+      // Extract relevant information from the DOM element and create a FootnoteNode
+      const fields = {
+        // Extract relevant information from the DOM element attributes or content
+        description: "...", // Replace with actual logic to extract description
+        id: 1, // Replace with actual logic to extract id
+      };
+
+      node = $createFootnoteNode({
+        fields: fields,
+      });
+    }
+  }
+
+  return { node };
 }

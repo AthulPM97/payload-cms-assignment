@@ -5,7 +5,7 @@ import {
   HTMLConverter,
 } from "@payloadcms/richtext-lexical";
 import { SectionWithEntries } from "../floatingSelectToolbarSection";
-import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND } from "lexical";
+import { $isRangeSelection } from "lexical";
 
 import { TOGGLE_SUPERSCRIPT_WITH_MODAL_COMMAND } from "../commands";
 import { FootnoteNode, SerializedFootnoteNode } from "./FootnoteNode";
@@ -54,6 +54,19 @@ export const CustomSuperScript = (): FeatureProvider => {
               ),
             position: "normal",
           },
+          {
+            Component: () =>
+              import("./FootnoteModal").then((module) => {
+                const footnoteModalPlugin = module.FootnoteModalPlugin;
+                return import("payload/utilities").then((module) =>
+                  module.withMergedProps({
+                    Component: footnoteModalPlugin,
+                    toMergeIntoProps: props,
+                  })
+                );
+              }),
+            position: "floatingAnchorElem",
+          },
         ],
         nodes: [
           // ... other nodes
@@ -71,7 +84,7 @@ export const CustomSuperScript = (): FeatureProvider => {
                   });
 
                   const footnoteContent = node.fields.id || "";
-                  return `<sup>${footnoteContent}</sup>`;
+                  return `<sup><a>${footnoteContent}</a></sup>${childrenText}`;
                 },
                 nodeTypes: [FootnoteNode.getType()],
               } as HTMLConverter<SerializedFootnoteNode>,
@@ -80,7 +93,7 @@ export const CustomSuperScript = (): FeatureProvider => {
             type: FootnoteNode.getType(),
           },
         ],
-        props: null,
+        props,
       };
     },
     key: "superscript",

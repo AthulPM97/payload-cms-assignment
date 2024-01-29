@@ -3,7 +3,6 @@ import { useModal } from "@faceless-ui/modal";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
-  $getRoot,
   $getSelection,
   $isRangeSelection,
   COMMAND_PRIORITY_LOW,
@@ -46,11 +45,9 @@ export function YourCustomEditor({}) {
     editor.update(() => {
       const selection = $getSelection();
       const nodeTree = editor.getEditorState()._nodeMap;
-      console.log("node tree ", nodeTree);
       if ($isRangeSelection(selection)) {
         const id = $getFootnoteCount(nodeTree) + 1;
         const nodes = selection.getNodes();
-        console.log("nodes ", nodes);
         const lastSelectedNode = nodes[nodes.length - 1];
         if (nodes) {
           const newFootnoteNode = $createFootnoteNode({
