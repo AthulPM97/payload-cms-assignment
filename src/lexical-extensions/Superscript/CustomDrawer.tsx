@@ -39,6 +39,7 @@ export function YourCustomEditor({}) {
     depth: editDepth,
     slug: `lexical-rich-text-super-` + uuid,
   });
+  global.superScriptDrawerSlug = drawerSlug
 
   // handlers
   const handleModalSubmit = (fields: Fields, data: Data) => {

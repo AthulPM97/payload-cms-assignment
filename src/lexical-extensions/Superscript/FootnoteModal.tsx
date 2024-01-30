@@ -20,7 +20,6 @@ export function FootnoteModal() {
   const { closeModal, toggleModal } = useModal();
 
   const editorRef = useRef(null);
-
   const editDepth = useEditDepth();
   const { uuid } = useEditorConfigContext();
 
@@ -62,7 +61,8 @@ export function FootnoteModal() {
                 aria-label="Edit link"
                 className="link-edit"
                 onClick={() => {
-                  toggleModal(drawerSlug);
+                  // toggleModal(drawerSlug);
+                  toggleModal(global.superScriptDrawerSlug)
                 }}
                 onMouseDown={(event) => {
                   event.preventDefault();
